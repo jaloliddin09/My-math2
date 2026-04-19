@@ -13,6 +13,12 @@ let _fbListener = null;
 // ============================================================
 // UTILS
 // ============================================================
+
+// Mahalliy vaqtni 'YYYY-MM-DDTHH:mm' formatida qaytaradi (timezone yo'q)
+function localDateStr(d) {
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes());
+}
 function today() { return new Date().toISOString().split('T')[0]; }
 function nowTs() { return Date.now(); }
 function genId() { return '_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36); }

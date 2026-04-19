@@ -98,7 +98,7 @@ function renderParentHome() {
                 : (DATA.settings && DATA.settings.nextClassDt) ? DATA.settings.nextClassDt : '';
   if (!grpNextDt && group && group.classDays && group.classDays.length && group.classTime) {
     const auto = computeNextClassDt(group.classDays, group.classTime);
-    if (auto) grpNextDt = auto.toISOString().slice(0,16);
+    if (auto) grpNextDt = localDateStr(auto);
   }
   const scheduleLabel = grpSchedule || (group && group.classTime ?
     `${(group.classDays||[]).map(d=>['Ya','Du','Se','Cho','Pay','Ju','Sha'][d]).join(',')} ${group.classTime}` :
@@ -110,13 +110,7 @@ function renderParentHome() {
     // Bu string timezone yo'q, shuning uchun lokal vaqt sifatida o'qiladi.
     // O'zbekiston UTC+5: agar brauzer boshqa TZ da bo'lsa 5 soat xato beradi.
     // Yechim: string ni har doim UTC+5 deb hisoblash
-    let _targetDate;
-    if (grpNextDt && grpNextDt.length >= 16 && !grpNextDt.includes('Z') && !grpNextDt.includes('+')) {
-      // 'YYYY-MM-DDTHH:mm' → UTC+5 ga explicit o'tkazish
-      _targetDate = new Date(grpNextDt + ':00+05:00');
-    } else {
-      _targetDate = new Date(grpNextDt);
-    }
+    const _targetDate = new Date(grpNextDt);
     const diff = _targetDate - new Date();
     if (diff > 0) {
       const days = Math.floor(diff / 86400000);

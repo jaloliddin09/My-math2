@@ -168,7 +168,7 @@ window.saveGroupSchedule = async function(gid) {
 
   // Avtomatik keyingi dars hisoblash
   const nextDt = computeNextClassDt(days, time);
-  const nextDtStr = nextDt ? nextDt.toISOString().slice(0,16) : '';
+  const nextDtStr = nextDt ? localDateStr(nextDt) : '';
 
   DATA.groups[gid].schedule    = sch;
   DATA.groups[gid].classTime   = time;
@@ -251,7 +251,7 @@ function checkGuestPostsDot() {
     // Yangi hisobla
     const next = computeNextClassDt(days, time);
     if (!next) return;
-    const nextStr = next.toISOString().slice(0, 16);
+    const nextStr = localDateStr(next);
     group.nextClassDt = nextStr;
     try { fbUpdate('groups/' + gid, { nextClassDt: nextStr }); } catch(e) {}
   }
