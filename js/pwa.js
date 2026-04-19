@@ -207,21 +207,26 @@ window.pwaDismissBar = function() {
 window._showIosGuide = _showIosGuide;
 
 // ═══════════════════════════════════════════════════════════
-// ADMIN: kesh tozalash (tejamkor — barcha fayllarni yuklamaydi)
+// ADMIN: barcha foydalanuvchilar keshini tozalash va qayta yuklash
+// SW FORCE_UPDATE → hamma ochiq tabga RELOAD yuboradi
 // ═══════════════════════════════════════════════════════════
-window.forceCacheClear = async function() {
-  if (!confirm('Keshni tozalash. Sahifa qayta yuklanadi. Davom etasizmi?')) return;
-  toast('🔄 Tozalanmoqda...');
+window.forceCacheClear = function() {
+  if (!confirm('Barcha foydalanuvchilar (ota-ona, mehmon) keshi tozalanib sahifasi qayta yuklanadi.\nDavom etasizmi?')) return;
+  toast('📡 Yuborilmoqda...');
   if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+    // FORCE_UPDATE: SW barcha ochiq tablarning keshini tozalaydi + RELOAD yuboradi
+    navigator.serviceWorker.controller.postMessage({ type: 'FORCE_UPDATE' });
+    // O'zimiz ham 1.5s dan keyin qayta yuklaymiz
+    setTimeout(() => window.location.reload(true), 1500);
   } else {
+    // SW yo'q bo'lsa — kamida o'zimizni tozalaymiz
     if ('caches' in window) {
-      const keys = await caches.keys();
-      await Promise.all(keys.map(k => caches.delete(k)));
+      caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
+        .then(() => window.location.reload(true));
+    } else {
+      window.location.reload(true);
     }
   }
-  toast('✅ Tozalandi! Sahifa yangilanmoqda...');
-  setTimeout(() => window.location.reload(true), 1500);
 };
 
 // ═══════════════════════════════════════════════════════════
