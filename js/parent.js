@@ -98,7 +98,7 @@ function renderParentHome() {
                 : (DATA.settings && DATA.settings.nextClassDt) ? DATA.settings.nextClassDt : '';
   if (!grpNextDt && group && group.classDays && group.classDays.length && group.classTime) {
     const auto = computeNextClassDt(group.classDays, group.classTime);
-    if (auto) grpNextDt = localDateStr(auto);
+    if (auto) grpNextDt = auto.toISOString().slice(0,16);
   }
   const scheduleLabel = grpSchedule || (group && group.classTime ?
     `${(group.classDays||[]).map(d=>['Ya','Du','Se','Cho','Pay','Ju','Sha'][d]).join(',')} ${group.classTime}` :
@@ -106,12 +106,7 @@ function renderParentHome() {
 
   let countdownHtml = '';
   if (grpNextDt) {
-    // datetime-local string ('2025-04-17T14:00') ni to'g'ri parse qilish
-    // Bu string timezone yo'q, shuning uchun lokal vaqt sifatida o'qiladi.
-    // O'zbekiston UTC+5: agar brauzer boshqa TZ da bo'lsa 5 soat xato beradi.
-    // Yechim: string ni har doim UTC+5 deb hisoblash
-    const _targetDate = new Date(grpNextDt);
-    const diff = _targetDate - new Date();
+    const diff = new Date(grpNextDt) - new Date();
     if (diff > 0) {
       const days = Math.floor(diff / 86400000);
       const h  = Math.floor((diff % 86400000) / 3600000);
