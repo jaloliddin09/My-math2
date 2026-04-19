@@ -9,11 +9,13 @@ function applySettings() {
   const el1 = document.getElementById('admin-site-name');
   const el2 = document.getElementById('parent-site-name');
   const el3 = document.getElementById('guest-site-name');
+  const el4 = document.getElementById('guest-site-name2');
   const lt  = document.getElementById('login-title');
   const lv  = document.getElementById('login-version');
   if (el1) el1.textContent = n;
   if (el2) el2.textContent = n;
   if (el3) el3.textContent = n;
+  if (el4) el4.textContent = n;
   if (lt) lt.textContent = loginTitle;
   if (lv)  lv.textContent  = 'Baholash tizimi ' + ver;
   const si = document.getElementById('set-name');
